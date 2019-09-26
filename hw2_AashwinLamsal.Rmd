@@ -19,7 +19,7 @@ ggplot(mpg, aes(displ, hwy)) + geom_point(aes(colour = "blue"))
   
 A1) The reason why the plot points are red instead of blue is the use of the aes function within the geom_point call. This is because of the difference between setting and mapping. The aes function takes in mappings from our data into our geom, when actually we want to set it in our geom instead, in order to get the points to be blue.
 
-```{r, eval=FALSE}
+```{r}
 library(ggplot2)
 ggplot(mpg, aes(displ, hwy)) + geom_point(color = "blue")
 
@@ -27,7 +27,7 @@ ggplot(mpg, aes(displ, hwy)) + geom_point(color = "blue")
 
 Q2) Use the fbi dataset in the classdata library to answer this question. Write code to replicate the following plot. Make sure to pay attention to labels, including the legend!
 
-```{r, eval=FALSE}
+```{r}
 library(classdata)
 library(ggplot2)
 head(fbiwide)
@@ -44,7 +44,7 @@ ggplot(data = notCalifornia) + geom_line(aes(x=Year, y=Motor.vehicle.theft, grou
 
 Q3) We want to create a side-by-side boxplot of reported crimes (Count) for violent and non-violent crime (Violent.crime). I’ve taken log(Count) so that the data is easier to visualize. However, the following code doesn’t produce what I expected. Debug this code to produce the plot that we want. Add the appropriate labels.
 
-```{r, eval=FALSE}
+```{r}
 #Original Code
 #ggplot(fbi,aes(log(Count),Violent.crime)) + geom_boxplot() + coord_flip()
 head(fbi) 
@@ -57,7 +57,7 @@ ggplot(fbi,aes(x = fbi$Violent.crime, y=log(Count) )) + geom_boxplot() + labs(x 
 
 Q4) What happens if you try to facet on a continuous variable?
 A4) There ends up being 1 facet graph for each value. Using the same mpg dataset from question 1, I facet_wrapped by city fuel economy for the cars, while making the x-value of the plot the city fuel economy as well. This shows a plot for every value of cty, see example plot below for details.
-```{r, eval = FALSE}
+```{r}
 head(mpg)
 ggplot(mpg, aes(x = cty, y = hwy)) + geom_point() + facet_wrap(~ cty)
 #Inspired by an example in a Data Visualization tutorial on Amazon Web Services' website (https://rstudio-pubs-static.s3.amazonaws.com/271994_11b7ddf08518406c942009d2da632982.html).I changed the continuous variable by which we facet_wrap as well as the x variable that I use for the plot. Edited the syntax to follow how we've been using facet_wrap in class for consistency.
@@ -77,7 +77,7 @@ Q5) Critique this plot. What do you think is a problematic feature of this plot 
 
 A5) As far as accurately displaying the fuel economy of these cars, the graph does its job well, but it's missing labels, a title, as well as a legend, and by adding those elements, the graph will be much more meaningful to a reader who isn't familiar with the dataset. It would also be good to check the average fuel economy of the cars by manufacturing year, specfically by the class of vehicle, which I've included below.
 
-```{r, eval=FALSE}
+```{r}
 df_mpg <- mpg
 ggplot(mpg, aes(cty, hwy, color = year)) + geom_point() + labs(x = "City Mileage", y = "Highway Mileage", title= "Fuel Economy of Cars Manufactured in the Year 1999 and 2008")
 
@@ -95,7 +95,7 @@ ggplot(mpg, aes(average_mpg, class, color = year)) + geom_point() + labs(x = "Av
 Q6) Are cars in 2008 more fuel efficient than cars in 1999? Use graphs and summary statistics to answer this question. Explain your graphs in context.
 A6) Using the average fuel economy, calculated by adding the city and highway mileage of a car and dividing the value by 2, you'll see below that there are exactly 3 cars that have better average fuel efficiency than cars that were manufactured in 2008. These are compact and subcompact cars as well. However, the seem to be outliers compared to the rest of the dataset, so I can't conclusively say that cars manufactered in 1999 are more fuel efficient than cars. Along with that, after visualizing the data by class of vehicle, you can see that certain classes have gotten much more fuel efficient in 2008 compared to their 1999 counterparts, SUVs and midsized vehicles especially. After creating boxplots for Average MPG of cars manufactured in 1999 and 2008 on separate plots, you can see that the boxplots on the 2008 plot are indeed slightly higher than those in 1999, but the scales of the plots are definitely different, with the 2008 plot having a maximum value of 35 mpg, and the 1999 plot having a maximum value of 40 mpg. Again, the results seem inconclusive, most of the cars have a similar distribution of average mpg in both years, but since 1999 has the most fuel efficient cars among both (even if they are outliers), I'd wager to say that cars manufactuered in 1999 are just as fuel efficient as cars manufactered in 2008, with some cars made in 1999 topping the charts for both years. 
 
-```{r, eval=FALSE}
+```{r}
 ggplot(mpg, aes(average_mpg, class, color = year)) + geom_point() + labs(x = "Average MPG", y = "Class of Vehicle", title= "Average Fuel Economy of Cars Manufactured in the Year 1999 and 2008")#Same graph used in question 5.
 
 cars1999 <- subset(mpg, mpg$year == 1999)
@@ -112,7 +112,7 @@ Q7)Explore the diamonds dataset. What is the distribution of the variable price 
 
 A7) Initially I created a line graph of the price on the y axis vs. carat on the x axis, and just the result was just what I expected, with the price steadily increasing as the carat of the diamond increases. Next, I decided to see whether or not clarity was a major factor in the pricing of the diamonds. The scale on the legend reads from worst to best clarity quality, IF being the highest clarity. Up to a certain carat cut, IF diamonds are much more pricier than I1 diamonds, who are on the complete opposite end of the spectrum, however the carat of IF diamonds ends at around 2.2-2.25 carats, however I1 diamonds overtake all others in price once it passes the 4.5 carat mark. Surprisingly, the clarity and carat value of a diamond doesn't seem to correlate with the price as much as the cut, as you see on the fourth plot, where ideal cut diamonds top prices, up until the diamond sizes reach 2.6 carats. I conclude that the factor that correlates the most with price is the cut of the diamond, for most of the time, but other cuts do start to overtake it the higher the carat gets.
 
-```{r, eval=FALSE}
+```{r}
 diamondsdf <- diamonds
 head(diamondsdf)
 ggplot(diamonds, aes(x = carat, y = price)) +geom_smooth() + labs(x = "Carat", y = "Price", title = "Price vs. Carat of Diamonds")
@@ -124,6 +124,6 @@ ggplot(diamonds, aes(x = carat, y = price, color = cut, group = cut)) +geom_smoo
 ```
 
 
-
+   
 
 
