@@ -14,13 +14,61 @@ knitr::opts_chunk$set(echo = TRUE)
 Part 1 - Understanding the mechanisms of ggplot
 In order to receive full credit, you must use ggplot syntax to answer the questions in Part 1.
 
-The following code produces a scatterplot with pink points, even though we specified blue. Why aren’t the points blue? First, explain why this happens and then fix the code to correctly produce a scatterplot with blue points.
+Q1) The following code produces a scatterplot with pink points, even though we specified blue. Why aren’t the points blue? First, explain why this happens and then fix the code to correctly produce a scatterplot with blue points.
 ggplot(mpg, aes(displ, hwy)) + geom_point(aes(colour = "blue"))
   
-  - The reason why the plot points are red instead of blue is the use of the aes function within the geom_point call. This is because of the difference between setting and mapping. The aes function takes in mappings from our data into our geom, when actually we want to set it in our geom instead, in order to get the points to be blue.
+A1) The reason why the plot points are red instead of blue is the use of the aes function within the geom_point call. This is because of the difference between setting and mapping. The aes function takes in mappings from our data into our geom, when actually we want to set it in our geom instead, in order to get the points to be blue.
 
 ```{r, eval=FALSE}
 library(ggplot2)
 ggplot(mpg, aes(displ, hwy)) + geom_point(color = "blue")
 
 ```
+
+Q2) Use the fbi dataset in the classdata library to answer this question. Write code to replicate the following plot. Make sure to pay attention to labels, including the legend!
+
+```{r, eval=FALSE}
+library(classdata)
+library(ggplot2)
+head(fbiwide)
+#first we need to subset the fbiwide dataset to separate California from the rest of the US
+californiaOnly <- subset(fbiwide, fbiwide$State == "California") 
+notCalifornia <- subset(fbiwide, fbiwide$State != "California")
+
+#next we plot the lines using 2 geoms
+ggplot(data = notCalifornia) + geom_line(aes(x=Year, y=Motor.vehicle.theft, group = notCalifornia$State, color = "Red", legend = "Rest of US")) + geom_line(data = californiaOnly, aes(x = Year, y=Motor.vehicle.theft, group = californiaOnly$State, color = "dark turquoise", legend = "California")) + labs(x = "Year", y = "Motor Vehicle Thefts", title = "Motor vehicle thefts over time") + theme(legend.position = "right")
+
+#Was not able to get the legend to show correctly, I realize that color should be set to state, except each line would have ended up being colored differently depending on the state. On top of the previous issue, the color has flipped the labels for some reason that I don't understand, so I hope that you could clarify that for me in the comments of my submission!
+
+```
+
+Q3) We want to create a side-by-side boxplot of reported crimes (Count) for violent and non-violent crime (Violent.crime). I’ve taken log(Count) so that the data is easier to visualize. However, the following code doesn’t produce what I expected. Debug this code to produce the plot that we want. Add the appropriate labels.
+
+```{r, eval=FALSE}
+#Original Code
+#ggplot(fbi,aes(log(Count),Violent.crime)) + geom_boxplot() + coord_flip()
+head(fbi) 
+#I ended up switching the variable assignments, with violent crimes on the x axis, and log(count) on  the y axis. I also removed coord_flip() since it made the boxplot horizontal instead of vertical.
+ggplot(fbi,aes(x = fbi$Violent.crime, y=log(Count) )) + geom_boxplot() + labs(x = "Violent Crime (T/F)", y = "Count", title = "Violent vs. Non-violent Crimes") 
+
+
+
+```
+
+Q4) What happens if you try to facet on a continuous variable?
+A4) There ends up being 1 facet for each value, see example plot below for details.
+```{r, eval = FALSE}
+ggplot(data = mpg) + 
+  geom_point(aes(x = cyl, y = hwy)) +
+  facet_wrap(~ displ)
+
+```
+
+
+
+
+
+
+
+
+
