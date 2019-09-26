@@ -1,0 +1,26 @@
+---
+title: "Homework 2"
+author: "Aashwin Lamsal"
+date: "9/26/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+Part 1 - Understanding the mechanisms of ggplot
+In order to receive full credit, you must use ggplot syntax to answer the questions in Part 1.
+
+The following code produces a scatterplot with pink points, even though we specified blue. Why aren’t the points blue? First, explain why this happens and then fix the code to correctly produce a scatterplot with blue points.
+ggplot(mpg, aes(displ, hwy)) + geom_point(aes(colour = "blue"))
+  
+  - The reason why the plot points are red instead of blue is the use of the aes function within the geom_point call. This is because of the difference between setting and mapping. The aes function takes in mappings from our data into our geom, when actually we want to set it in our geom instead, in order to get the points to be blue.
+
+```{r, eval=FALSE}
+library(ggplot2)
+ggplot(mpg, aes(displ, hwy)) + geom_point(color = "blue")
+
+```
