@@ -56,16 +56,58 @@ ggplot(fbi,aes(x = fbi$Violent.crime, y=log(Count) )) + geom_boxplot() + labs(x 
 ```
 
 Q4) What happens if you try to facet on a continuous variable?
-A4) There ends up being 1 facet for each value, see example plot below for details.
+A4) There ends up being 1 facet graph for each value. Using the same mpg dataset from question 1, I facet_wrapped by city fuel economy for the cars, while making the x-value of the plot the city fuel economy as well. This shows a plot for every value of cty, see example plot below for details.
 ```{r, eval = FALSE}
-ggplot(data = mpg) + 
-  geom_point(aes(x = cyl, y = hwy)) +
-  facet_wrap(~ displ)
+head(mpg)
+ggplot(mpg, aes(x = cty, y = hwy)) + geom_point() + facet_wrap(~ cty)
+#Inspired by an example in a Data Visualization tutorial on Amazon Web Services' website (https://rstudio-pubs-static.s3.amazonaws.com/271994_11b7ddf08518406c942009d2da632982.html).I changed the continuous variable by which we facet_wrap as well as the x variable that I use for the plot. Edited the syntax to follow how we've been using facet_wrap in class for consistency.
+```
+
+Part 2 - Data Exploration: Cars and Mileage
+For this part we will use the mpg data set and the diamonds dataset. You can access both by loading the package ggplot2 into your R session by executing the command library(ggplot2).
+
+The mpg data includes information about fuel economy of popular car models for the years 1999 and 2008 as collected by the US Environmental Protection Agency.
+
+The diamonds data inclues information about the prices and attributes of almost 54,000 diamonds.
+
+An answer should include a short paragraph of text for the explanation to a (human) reader, together with appropriate R code, outputs, and graphs.
+
+
+Q5) Critique this plot. What do you think is a problematic feature of this plot and why does it not convey all of the relevant information? Propose an improved plot. Incldue your code. Hint: look carefully at the values for the variables cty and hwy.
+
+A5) As far as accurately displaying the fuel economy of these cars, the graph does its job well, but it's missing labels, a title, as well as a legend, and by adding those elements, the graph will be much more meaningful to a reader who isn't familiar with the dataset. It would also be good to check the average fuel economy of the cars by manufacturing year, specfically by the class of vehicle, which I've included below.
+
+```{r, eval=FALSE}
+df_mpg <- mpg
+ggplot(mpg, aes(cty, hwy, color = year)) + geom_point() + labs(x = "City Mileage", y = "Highway Mileage", title= "Fuel Economy of Cars Manufactured in the Year 1999 and 2008")
+
+#checking to see the average fuel economy, by adding cty and hwy and dividing by 2
+
+average_mpg <- (mpg$cty + mpg$hwy) / 2
+
+ggplot(mpg, aes(average_mpg, class, color = year)) + geom_point() + labs(x = "Average MPG", y = "Class of Vehicle", title= "Average Fuel Economy of Cars Manufactured in the Year 1999 and 2008")
+
+
+
 
 ```
 
+Q6) Are cars in 2008 more fuel efficient than cars in 1999? Use graphs and summary statistics to answer this question. Explain your graphs in context.
+A6) Using the average fuel economy, calculated by adding the city and highway mileage of a car and dividing the value by 2, you'll see below that there are exactly 3 cars that have better average fuel efficiency than cars that were manufactured in 2008. These are compact and subcompact cars as well. However, the seem to be outliers compared to the rest of the dataset, so I can't conclusively say that cars manufactered in 1999 are more fuel efficient than cars. Along with that, after visualizing the data by class of vehicle, you can see that certain classes have gotten much more fuel efficient in 2008 compared to their 1999 counterparts, SUVs and midsized vehicles especially. After creating boxplots for Average MPG of cars manufactured in 1999 and 2008 on separate plots, you can see that the boxplots on the 2008 plot are indeed slightly higher than those in 1999, so I would say that cars manufactured in 2008 are more fuel efficient overall.
 
+```{r, eval=FALSE}
+ggplot(mpg, aes(average_mpg, class, color = year)) + geom_point() + labs(x = "Average MPG", y = "Class of Vehicle", title= "Average Fuel Economy of Cars Manufactured in the Year 1999 and 2008")#Same graph used in question 5.
 
+cars1999 <- subset(mpg, mpg$year == 1999)
+cars2008 <- subset(mpg, mpg$year == 2008)
+
+cars1999$averageMPG <- (cars1999$cty + cars1999$hwy)/2 
+cars2008$averageMPG <- (cars2008$cty + cars2008$hwy)/2
+
+ggplot(cars1999, aes(x =class, y = averageMPG)) + geom_boxplot() + labs(x = "Class of Vehicle", y = "Average MPG", title= "Average Fuel Economy of Cars Manufactured in the Year 1999 ")
+ggplot(cars2008, aes(x =class, y = averageMPG)) + geom_boxplot() + labs(x = "Class of Vehicle", y = "Average MPG", title= "Average Fuel Economy of Cars Manufactured in the Year 2008 ")
+
+```
 
 
 
